@@ -35,15 +35,6 @@ export function Todo() {
     });
   };
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (editId) {
-  //     updateTodo.mutate({ id: editId, title: todo });
-  //   } else {
-  //     createTodo.mutate({ title: todo });
-  //     setTodo("");
-  //   }
-  // };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,12 +68,12 @@ export function Todo() {
   };
 
   return (
-    <div className="border-0.5 max-h-[560px] w-full max-w-md rounded-md border border-violet-900 p-6">
+    <div className="border-1 shadow-2xl shadow-violet-900 max-h-[560px] w-full max-w-md rounded-md border border-violet-900 p-6">
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <div className="flex items-center justify-around gap-x-6">
           <input
             type="text"
-            placeholder="Title"
+            placeholder="Type here..."
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
             className="w-96 rounded-md px-4 py-3 text-black"
@@ -103,7 +94,13 @@ export function Todo() {
         </div>
       </form>
       <div>
-        {getAllTodo?.map((todo) => (
+        
+        {/* Display todos */}
+        { !getAllTodo?.length ? (
+          <div className="mt-4 flex w-full items-center justify-center gap-3 rounded bg-gray-400/50 px-3">
+            <h2 className="text-lg italic py-2.5">Add Some Todos</h2>
+          </div>
+        ) : getAllTodo?.map((todo) => (
           <div
             className="text-break-full mt-4 flex w-full items-center justify-between gap-3 rounded bg-gray-400/50 px-3"
             key={todo?.id}

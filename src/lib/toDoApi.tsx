@@ -41,7 +41,8 @@ export function useTodoApi() {
   const completeTodo = api.todo.complete.useMutation({
     onSuccess: async (data: { id: number; completed: boolean }|any) => {
       await utils.todo.invalidate();
-      toast.success(`Todo marked as ${data?.completed ? "completed" : "uncompleted"}`);
+      console.log({data});
+      toast.success(`Todo marked as completed/uncompleted`);
     },
     onError: (error) => {
       toast.error(`Failed to complete todo: ${error?.message}`);
