@@ -36,6 +36,7 @@ export const todoRouter = createTRPCRouter({
       await ctx.db.insert(TodoTable).values({
         title: input.title,
       });
+      return { message: "Todo created successfully!" };
     }),
 
     // to update todo
@@ -48,6 +49,7 @@ export const todoRouter = createTRPCRouter({
           title: input.title,
         })
         .where(eq(TodoTable.id, input.id));
+        return { message: "Todo updated successfully!" };
     }),
 
     // to mark as completed
@@ -57,9 +59,11 @@ export const todoRouter = createTRPCRouter({
       await ctx.db
         .update(TodoTable)
         .set({
-          completed: true,
+          completed:input?.completed,
         })
         .where(eq(TodoTable.id, input.id));
+        return { message: `Todo marked as ${TodoTable.completed? "completed":"UnCompleted"}!` };
+
     }),
 
     // to delete todo
@@ -67,7 +71,8 @@ export const todoRouter = createTRPCRouter({
     .input(todoIdInput)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.delete(TodoTable).where(eq(TodoTable.id, input.id));
-      
+      return { message: "Todo deleted successfully!" };
+    
     }),
 
   getAll: publicProcedure.query(async ({ ctx }) => {
