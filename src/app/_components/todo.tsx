@@ -1,13 +1,14 @@
 "use client";
 
 import { Check, Edit2, Trash, Undo2 } from "lucide-react";
-import {
-  useState,
-} from "react";
+import { useState } from "react";
 import { api } from "~/trpc/react";
 import Modal from "./modal";
+import { useTodoApi } from "../../lib/toDoApi";
+import toast from "react-hot-toast";
 
 export function Todo() {
+  const { createTodo, updateTodo, deleteTodo, completeTodo } = useTodoApi();
   const [getAllTodo] = api.todo.getAll.useSuspenseQuery();
   const utils = api.useUtils();
 
@@ -15,40 +16,6 @@ export function Todo() {
   const [editId, setEditId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTodoId, setSelectedTodoId] = useState<number | null>(null);
-
-  // Todo Creating
-  const createTodo = api.todo.create.useMutation({
-    onSuccess: async () => {
-      await utils.todo.invalidate();
-      setTodo("");
-      setEditId(null);
-    },
-  });
-
-  // updating Todo Api
-  const updateTodo = api.todo.update.useMutation({
-    onSuccess: async () => {
-      await utils.todo.invalidate();
-      setTodo("");
-      setEditId(null);
-    },
-  });
-
-  // deleting Todo Api
-  const deleteTodo = api.todo.delete.useMutation({
-    onSuccess: async () => {
-      await utils.todo.invalidate();
-      setSelectedTodoId(null);
-      setIsModalOpen(false);
-    },
-  });
-
-  // Marking completed
-  const completeTodo = api.todo.complete.useMutation({
-    onSuccess: async () => {
-      await utils.todo.invalidate();
-    },
-  });
 
   const handleEdit = (todoId: number, title: string) => {
     setTodo(title);
@@ -68,17 +35,49 @@ export function Todo() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   if (editId) {
+  //     updateTodo.mutate({ id: editId, title: todo });
+  //   } else {
+  //     createTodo.mutate({ title: todo });
+  //     setTodo("");
+  //   }
+  // };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const trimmedTodo = todo.trim();
+    if (trimmedTodo === "") {
+      toast.error("Todo cannot be empty or whitespace.");
+      return;
+    }
+    const todoExists = getAllTodo.some(
+      (item: { title: string | unknown | undefined | any }) =>
+        item?.title.trim().toLowerCase() === trimmedTodo.toLowerCase(),
+    );
+
     if (editId) {
-      updateTodo.mutate({ id: editId, title: todo });
+      const existingTodo = getAllTodo.find((item) => item.id === editId);
+      if (!todoExists || (existingTodo && existingTodo.title === trimmedTodo)) {
+        updateTodo.mutate({ id: editId, title: trimmedTodo });
+        setEditId(null);
+        setTodo("");
+      } else {
+        toast.error("Todo already exists.");
+      }
     } else {
-      createTodo.mutate({ title: todo });
+      if (!todoExists) {
+        createTodo.mutate({ title: trimmedTodo });
+        setTodo("");
+      } else {
+        toast.error("Todo already exists.");
+      }
     }
   };
 
   return (
-    <div className="border-0.5 h-[560px] w-full max-w-md rounded-md border border-violet-900 p-6">
+    <div className="border-0.5 max-h-[560px] w-full max-w-md rounded-md border border-violet-900 p-6">
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
         <div className="flex items-center justify-around gap-x-6">
           <input
@@ -156,7 +155,7 @@ export function Todo() {
           content={"Are you sure you want to delete this todo?"}
           onCancel={() => setIsModalOpen(false)}
           onConfirm={() => {
-            deleteTodo.mutate({ id: selectedTodoId! });
+            deleteTodo.mutate({ id: selectedTodoId! }), setIsModalOpen(false);
           }}
         />
       )}
