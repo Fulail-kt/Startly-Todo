@@ -76,7 +76,7 @@ export function Todo() {
             placeholder="Type here..."
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
-            className="w-96 rounded-md px-4 py-3 text-black"
+            className="w-[70%] md:w-96 rounded-md px-4 py-3 text-black"
           />
           <button
             type="submit"
