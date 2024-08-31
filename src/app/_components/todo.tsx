@@ -179,7 +179,7 @@ export function Todo() {
                     {todo?.title}
                   </h2>
                   {/* tool tip for the description */}
-                  <span className="w-[10%]">
+                  <span className="w-[10%] cursor-pointer">
                     <Tooltip
                       content={
                         <div className="flex flex-col justify-between gap-3">
