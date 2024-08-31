@@ -6,6 +6,7 @@ import { TodoTable } from "~/server/db/schema";
 
 const todoInput = z.object({
   title: z.string().min(1),
+  description:z.string().min(2)
 });
 
 const todoIdInput = z.object({
@@ -14,6 +15,7 @@ const todoIdInput = z.object({
 
 const todoUpdateInput = todoIdInput.extend({
   title: z.string().min(1),
+  description:z.string().min(2)
 });
 
 const todoCompleteInput = todoIdInput.extend({
@@ -31,10 +33,10 @@ export const todoRouter = createTRPCRouter({
 
     // to create todo 
   create: publicProcedure
-    .input(z.object({ title: z.string().min(1) }))
+    .input(todoInput)
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(TodoTable).values({
-        title: input.title,
+        title: input.title,description:input.description
       });
     }),
 
@@ -46,6 +48,7 @@ export const todoRouter = createTRPCRouter({
         .update(TodoTable)
         .set({
           title: input.title,
+          description:input.description,
         })
         .where(eq(TodoTable.id, input.id));
      }),

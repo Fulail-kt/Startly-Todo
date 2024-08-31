@@ -3,6 +3,18 @@
 @tailwind utilities;
 
 
+
+.no-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scroll {
+  scrollbar-width: none; 
+}
+.no-scroll {
+  -ms-overflow-style: none;
+}
+
 .loader {
     width: 20px;
     height: 20px;

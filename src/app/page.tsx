@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-// import { LatestPost } from "~/app/_components/todo"
 import { api, HydrateClient } from "~/trpc/server";
 import {Todo} from "~/app/_components/todo"
 

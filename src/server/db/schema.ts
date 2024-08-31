@@ -7,6 +7,7 @@ export const createTable = sqliteTableCreator((name) => `${name}`);
 export const TodoTable = createTable("todo", {
   id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
   title: text("title", { length: 100 }),
+  description: text("description", { length: 200 }),
   completed: int("completed", { mode: "boolean" }).notNull().default(false),
   createdAt: int("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`).notNull(),
   updatedAt: int("updated_at", { mode: "timestamp" }).$onUpdate(() => new Date()),
