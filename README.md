@@ -32,7 +32,7 @@ This project is a simple Todo application built using the **create-t3-app** fram
 Make sure you have the following installed on your system:
 
 - [Node.js](https://nodejs.org/) (v16 or higher)
-- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+- [npm](https://www.npmjs.com/)
 - SQLite
 
 ### Installation
