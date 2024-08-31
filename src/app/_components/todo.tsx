@@ -1,10 +1,10 @@
 "use client";
 
-import { Check, Edit2, Eye, Trash, Undo2 } from "lucide-react";
+import { Check, Edit2, Trash, Undo2 } from "lucide-react";
 import { useState } from "react";
 import { api } from "~/trpc/react";
 import Modal from "./modal";
-import { useTodoApi } from "../../lib/toDoApi";
+import { useTodoApi } from "../../lib/todoApi";
 import toast from "react-hot-toast";
 import Tooltip from "./tooltip";
 
@@ -26,7 +26,6 @@ export function Todo() {
   // custom hook for all api
   const { createTodo, updateTodo, deleteTodo, completeTodo } = useTodoApi();
   const [getAllTodo] = api.todo.getAll.useSuspenseQuery();
-  const utils = api.useUtils();
 
   const [todo, setTodo] = useState<TodoInput>({ title: "", description: "" });
   const [editId, setEditId] = useState<number | null>(null);

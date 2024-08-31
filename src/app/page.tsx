@@ -1,11 +1,8 @@
-import Link from "next/link";
 
 import { api, HydrateClient } from "~/trpc/server";
 import {Todo} from "~/app/_components/todo"
 
 export default async function Home() {
-  const hello = await api.todo.hello({ text: "from tRPC" });
-
   void api.todo.getAll()
 
   return (

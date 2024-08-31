@@ -23,14 +23,7 @@ const todoCompleteInput = todoIdInput.extend({
 });
 
 export const todoRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-
+ 
     // to create todo 
   create: publicProcedure
     .input(todoInput)
